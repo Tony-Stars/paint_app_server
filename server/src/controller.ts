@@ -11,6 +11,10 @@ export class Controller {
         this.yandexDiskIntegration = yandexDiskIntegration;
     }
 
+    root(req: any, res: any) {
+        return res.status(200).json({ message: "Success" })
+    }
+
     postImage(req: any, res: any) {
         try {
             const data = req.body.img;

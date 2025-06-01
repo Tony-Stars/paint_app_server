@@ -7,6 +7,7 @@ export function makeRouter(di: DI): Router {
     const authController = di.authController;
 
     const router: Router = Router();
+    router.get('/', controller.root.bind(controller));
     router.get('/image', controller.getImage.bind(controller));
     router.post('/image', controller.postImage.bind(controller));
     router.get('/sequence', controller.getSequence.bind(controller));

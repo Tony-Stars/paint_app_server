@@ -16,11 +16,12 @@ export class AuthController {
     public async login(req: any, res: any): Promise<void> {
         try {
             const request = req.body as ILoginDto;
-            const user = await this.userService.read(undefined, request.email);
-            const token = this.userTokenService.generate();
-            console.log(token);
-            if (user?.password === request.password) {
-                return res.status(200).json(toUserResponse(user));
+            const user = await this.userService.read(undefined, request.login);
+            if (user) {
+                const token = this.userTokenService.generate();
+                if (user?.password === request.password) {
+                    return res.status(200).json(toUserResponse(user));
+                }
             }
 
             return res.status(400).json({ message: 'Некорректные данные' });
@@ -32,9 +33,9 @@ export class AuthController {
     public async register(req: any, res: any): Promise<void> {
         try {
             const request = req.body as IUserRequest;
-            const user = await this.userService.read(undefined, request.email);
+            const user = await this.userService.read(undefined, request.login);
             if (user) {
-                return res.status(400).json({ message: `Пользователь с email ${user.email} уже существуют` });
+                return res.status(400).json({ message: `Пользователь с login ${user.login} уже существуют` });
             }
 
             const result = await this.userService.create(request);

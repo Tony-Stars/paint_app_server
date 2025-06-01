@@ -20,21 +20,21 @@ export class UserService implements IUserService {
 
     public async create(request: IUserRequest): Promise<IUser> {
         const result = await this.database.query<IUser>(
-            'insert into "user" (name, surname, email, password) values ($1, $2, $3, $4) returning *',
-            [request.name, request.surname, request.email, request.password],
+            'insert into "user" (username, login, password) values ($1, $2, $3) returning *',
+            [request.username, request.login, request.password],
         );
         return result.rows[0];
     }
 
-    public async read(id?: number, email?: string): Promise<IUser | undefined> {
-        if (id && email) {
-            const result = await this.database.query<IUser>('select * from "user" where id = $1 and email = $2', [id, email]);
+    public async read(id?: number, login?: string): Promise<IUser | undefined> {
+        if (id && login) {
+            const result = await this.database.query<IUser>('select * from "user" where id = $1 and login = $2', [id, login]);
             return result.rows[0];
-        } else if (id && !email) {
+        } else if (id && !login) {
             const result = await this.database.query<IUser>('select * from "user" where id = $1', [id]);
             return result.rows[0];
-        } else if (!id && email) {
-            const result = await this.database.query<IUser>('select * from "user" where email = $1', [email]);
+        } else if (!id && login) {
+            const result = await this.database.query<IUser>('select * from "user" where login = $1', [login]);
             return result.rows[0];
         } else {
             throw Error('Отсутствуют параметры запроса');
@@ -43,8 +43,8 @@ export class UserService implements IUserService {
 
     public async update(id: number, request: IUserRequest): Promise<IUser> {
         const result = await this.database.query<IUser>(
-            'update "user" set name = $1, surname = $2, email = $3, password = $4 where id = $5 returning *',
-            [request.name, request.surname, request.email, request.password, id],
+            'update "user" set name = $1, login = $2, password = $3 where id = $4 returning *',
+            [request.username, request.login, request.password, id],
         );
         return result.rows[0];
     }
