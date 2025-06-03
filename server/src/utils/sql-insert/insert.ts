@@ -30,9 +30,8 @@ async function insertUser(di: DI, count: number) {
     const service = di.userService;
     for (let index = 0; index < count; index++) {
         await service.create({
-            name: 'name' + index,
-            surname: 'surname' + index,
-            email: 'email' + index,
+            username: 'name' + index,
+            login: 'login' + index,
             password: 'password' + index,
         });
     }
